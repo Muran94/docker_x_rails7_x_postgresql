@@ -17,7 +17,7 @@ services:
       args:
         bundle_jobs: 8
         bundle_without: staging:production
-    command: bash -c "rm -f tmp/pids/server.pid && rails s -p 3000 -b '0.0.0.0'"
+    command: sh -c "rm -f tmp/pids/server.pid && rails s -p 3000 -b '0.0.0.0'"
     env_file:
       - .env
     volumes:
