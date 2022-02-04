@@ -1,12 +1,19 @@
 # Instructions to initialize your rails app.
-## Step. 1
+## Step.1 Copy the folder.
 Copy this folder and create your own.
 
 `$ cp -r <path to this directory> <path to your app directory>`
 
 exp) `$ cp -r ../docker/templates/rails7_x_postgresql my_app`
 
-## Step. 2
+## Step.2 Edit .env file.
+Add a value to the APP_NAME.
+Only use snakecase letters.
+```
+APP_NAME=<some_name>
+```
+
+## Step.3 Initialize the app.
 Either run a script to initialize the app, or initialize manually by running the commands bellow.
 
 ### How to run the initializer script.

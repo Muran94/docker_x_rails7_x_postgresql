@@ -8,7 +8,7 @@ ENV LANG=ja_JP.UTF-8 \
     BUNDLE_JOBS=$bundle_jobs \
     BUNDLE_WITHOUT=$bundle_without
 RUN apk update && \
-    apk add --no-cache build-base git tzdata postgresql-client postgresql-dev && \
+    apk add --no-cache build-base git imagemagick tzdata postgresql-client postgresql-dev && \
     cp /usr/share/zoneinfo/Asia/Tokyo /etc/localtime
 
 

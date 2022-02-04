@@ -11,6 +11,7 @@ services:
       - ./tmp/db:/var/lib/postgresql/data
 
   web:
+    image: "${APP_NAME}_web"
     build:
       context: .
       target: app-for-development-and-test
@@ -21,9 +22,9 @@ services:
     env_file:
       - .env
     volumes:
-      - .:/app
+      - .:/app:cached
       - gems:/usr/local/bundle
-      - node_modules:/app/node_modules
+      - tmp:/app/tmp
     ports:
       - 3000:3000
     depends_on:
@@ -31,18 +32,41 @@ services:
     tty: true
     stdin_open: true
 
+  ### After you configure sidekiq settings, disable the comments bellow.
+  # redis:
+  #   image: redis:6.2.6-alpine
+  #   volumes:
+  #     - redis:/data
+  #   ports:
+  #     - 6379:6379
+
+  # sidekiq:
+  #   image: "${APP_NAME}_web"
+  #   command: bundle exec sidekiq -C config/sidekiq.yml
+  #   env_file:
+  #     - .env
+  #   volumes:
+  #     - .:/app:cached
+  #     - gems:/usr/local/bundle
+  #     - tmp:/app/tmp
+  #   depends_on:
+  #     - db
+  #     - redis
+
   minio:
     image: minio/minio:latest
     entrypoint: sh
     command: -c 'mkdir -p /export/${MINIO_BUCKET_FOR_DEVELOPMENT} && mkdir -p /export/${MINIO_BUCKET_FOR_TEST} && minio server /export'
+    env_file:
+      - .env
     volumes:
       - minio:/data
     ports:
       - 9000:9000
-    env_file:
-      - .env
 
 volumes:
   gems:
-  node_modules:
+  tmp:
+  redis:
   minio:
+
