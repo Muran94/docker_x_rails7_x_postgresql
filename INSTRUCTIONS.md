@@ -2,15 +2,19 @@
 ## Step. 1
 Copy this folder and create your own.
 
-`$ cp -r <path to this directory> <path to your app directory>`
+```bash
+$ cp -r <path to this directory> <path to your app directory>
 
-exp) `$ cp -r ../docker/templates/rails7_x_postgresql my_app`
+# Example
+$ cp -r ../docker/templates/rails7_x_postgresql my_app
+```
+
 
 ## Step. 2
 Either run a script to initialize the app, or initialize manually by running the commands bellow.
 
 ### How to run the initializer script.
-`./scripts/shell/app_initializer.sh`
+`$ ./scripts/shell/app_initializer.sh`
 
 ### How to initialize manually.
 
