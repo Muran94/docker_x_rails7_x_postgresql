@@ -24,9 +24,6 @@ services:
     volumes: &web_volumes
       - .:/app:cached
       - gem_volume:/usr/local/bundle
-      - /app/log
-      - /app/tmp
-      - /app/.git
     ports:
       - 3000:3000
     depends_on:
@@ -52,20 +49,19 @@ services:
   #     - db
   #     - redis
 
-  # minio:
-  #   image: minio/minio:latest
-  #   entrypoint: sh
-  #   command: -c 'mkdir -p /export/${MINIO_BUCKET_FOR_DEVELOPMENT} && mkdir -p /export/${MINIO_BUCKET_FOR_TEST} && minio server /export'
-  #   env_file:
-  #     - .env
-  #   volumes:
-  #     - minio_volume:/data:cached
-  #   ports:
-  #     - 9000:9000
+  minio:
+    image: minio/minio:latest
+    entrypoint: sh
+    command: -c 'mkdir -p /export/${MINIO_BUCKET_FOR_DEVELOPMENT} && mkdir -p /export/${MINIO_BUCKET_FOR_TEST} && minio server /export'
+    env_file:
+      - .env
+    volumes:
+      - minio_volume:/data:cached
+    ports:
+      - 9000:9000
 
 volumes:
   db_volume:
   gem_volume:
   redis_volume:
   minio_volume:
-
