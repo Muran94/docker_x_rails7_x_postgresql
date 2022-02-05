@@ -7,6 +7,14 @@ default: &default
   password: <%= ENV.fetch("DATABASE_PASSWORD") { 'password' } %>
   pool:     <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
 
+aws_rds: &aws_rds
+  <<: *default
+  database: <%= ENV.fetch('RDS_DB_NAME') %>
+  username: <%= ENV.fetch('RDS_USERNAME') %>
+  password: <%= ENV.fetch('RDS_PASSWORD') %>
+  host: <%= ENV.fetch('RDS_HOSTNAME') %>
+  port: <%= ENV.fetch('RDS_PORT') %>
+
 development:
   <<: *default
   database: 'app_development'
@@ -16,9 +24,7 @@ test:
   database: 'app_test'
 
 staging:
-  <<: *default
-  database: 'app_staging'
+  <<: *aws_rds
 
 production:
-  <<: *default
-  database: 'app_production'
+  <<: *aws_rds

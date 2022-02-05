@@ -27,6 +27,7 @@ RUN bundle install && \
 # BASE APP
 FROM base as base-app
 RUN apk update && \
+    apk del --purge build-base && \
     apk add --no-cache vim
 COPY . .
 COPY --from=gems /usr/local/bundle /usr/local/bundle
@@ -44,9 +45,13 @@ ENV RAILS_ENV=production \
     RACK_ENV=production \
     RAILS_LOG_TO_STDOUT=enabled \
     RAILS_SERVE_STATIC_FILES=enabled \
+    AWS_ACCESS_KEY_ID=dummy \
+    AWS_SECRET_ACCESS_KEY=dummy \
+    S3_DEFAULT_REGION=dummy \
+    S3_DEFAULT_BUCKET=dummy \
     SECRET_KEY_BASE=dummy
-COPY --from=yarn /app/node_modules node_modules
 RUN rails assets:precompile && \
-    apk del --purge build-base
+    chmod +x entrypoint.sh
+ENTRYPOINT ["entrypoint.sh"]
 EXPOSE 3000
 CMD ["rails", "server", "-b", "0.0.0.0"]
