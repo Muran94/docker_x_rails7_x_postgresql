@@ -10,12 +10,8 @@ $ cp -r ../docker/templates/rails7_x_postgresql my_app
 ```
 
 
-## Step.2 Edit .env file.
-Add a value to the APP_NAME.
-Only use snakecase letters.
-```
-APP_NAME=<some_name>
-```
+## Step.2 Configure docker-compose.yml and docker-compose.prod.yml
+Configure the image name for both docker-compose.yml and docker-compose.prod.yml files.
 
 ## Step.3 Initialize the app.
 Either run a script to initialize the app, or initialize manually by running the commands bellow.
@@ -31,6 +27,8 @@ docker compose run --no-deps web rails new . --force --skip-bundle --database=po
 docker compose run --no-deps web bundle install
 cp -f database.yml config/database.yml && rm database.yml
 docker compose run web bundle exec rails db:create
+cp -f .gitignore.template .gitignore && rm .gitignore.template
+git add . git commit -m "Initialized App"
 docker compose up -d
 docker compose exec web sh
 ```

@@ -8,7 +8,7 @@ ENV LANG=ja_JP.UTF-8 \
     BUNDLE_JOBS=$bundle_jobs \
     BUNDLE_WITHOUT=$bundle_without
 RUN apk update && \
-    apk add --no-cache build-base git imagemagick tzdata postgresql-client postgresql-dev vim yarn && \
+    apk add --no-cache build-base git imagemagick tzdata postgresql-client postgresql-dev python2 vim yarn && \
     cp /usr/share/zoneinfo/Asia/Tokyo /etc/localtime
 
 
@@ -27,9 +27,7 @@ RUN bundle install && \
 # YARN
 FROM base as yarn
 COPY package.json ./
-RUN apk add --no-cache python2 && \
-    yarn install --check-files && \
-    yarn cache clean
+RUN yarn install --check-files & yarn cache clean
 
 
 
@@ -51,5 +49,4 @@ FROM base-app as app-for-production
 COPY entrypoint.sh /usr/bin/
 RUN chmod +x /usr/bin/entrypoint.sh
 ENTRYPOINT ["entrypoint.sh"]
-EXPOSE 3000
-CMD ["rails", "server", "-b", "0.0.0.0"]
+EXPOSE 80
