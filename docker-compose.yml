@@ -2,32 +2,14 @@ version: '3.8'
 
 services:
   web:
-    image: <app_name>_web:latest
     build:
       context: .
       target: app-for-production
       args:
+        app_name: ${APP_NAME}
         bundle_jobs: 8
         bundle_without: development:test
     env_file:
       - .env
     ports:
       - 80:80
-
-  ### After you configure sidekiq settings, disable the comments bellow.
-  # redis:
-  #   image: redis:alpine
-  #   volumes:
-  #     - redis_volume:/data:cached
-  #   ports:
-  #     - 6379:6379
-
-  # sidekiq:
-  #   image: *web_image
-  #   command: bundle exec sidekiq -C config/sidekiq.yml
-  #   env_file:
-  #     .env
-  #   volumes: *web_volumes
-  #   depends_on:
-  #     - db
-  #     - redis

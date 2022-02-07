@@ -10,33 +10,38 @@ printf '\033[36m%s\033[m\n' 'docker compose run --no-deps web rails new . --forc
 docker compose run --no-deps web rails new . --force --skip-bundle --database=postgresql
 wait
 
-# 3. Bundle install
+# 3. Git init
+printf '\033[36m%s\033[m\n' 'Initialize git.'
+rm -rf .git && git init && git commit -am "Initialized App."
+wait
+
+# 4. Bundle install
 printf '\033[36m%s\033[m\n' 'docker compose run --no-deps web bundle install'
 docker compose run --no-deps web bundle install
 wait
 
-# 4. Configure database
+# 5. Configure database
 printf '\033[36m%s\033[m\n' 'Configuring database...'
-cp -f database.template.yml config/database.yml && rm database.template.yml
+mv -f database.template.yml config/database.yml
 docker compose run web bundle exec rails db:create
 wait
 
-# 5. Replace .gitignore.
+# 6. Replace .gitignore.
 printf '\033[36m%s\033[m\n' 'Replacing.gitignore file.'
-cp -f .gitignore.template .gitignore && rm .gitignore.template
+mv .gitignore.template .gitignore
 wait
 
-# 6. Initializing git.
-printf '\033[36m%s\033[m\n' 'Initializing Git.'
-git add . git commit -m "Initialized App"
+# 7. Commit changes to git.
+printf '\033[36m%s\033[m\n' 'Commit changes to git.'
+git commit -am "Configured app."
 wait
 
-# 7. docker-compose up -d
+# 8. docker-compose up -d
 printf '\033[36m%s\033[m\n' 'Starting server background...'
 docker compose up -d
 wait
 
-# 8. Enter web container
+# 9. Enter web container
 printf '\033[36m%s\033[m\n' 'Enter web container'
 docker compose exec web sh
 wait

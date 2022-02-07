@@ -1,12 +1,14 @@
 # BASE
 FROM ruby:3.1.0-alpine3.15 as base
+ARG app_name
 ARG bundle_jobs
 ARG bundle_without
-WORKDIR /app
-ENV LANG=ja_JP.UTF-8 \
+ENV APP_NAME=$app_name \
+    LANG=ja_JP.UTF-8 \
     TZ=Asia/Tokyo \
     BUNDLE_JOBS=$bundle_jobs \
     BUNDLE_WITHOUT=$bundle_without
+WORKDIR /${APP_NAME}
 RUN apk update && \
     apk add --no-cache build-base git imagemagick tzdata postgresql-client postgresql-dev python2 vim yarn && \
     cp /usr/share/zoneinfo/Asia/Tokyo /etc/localtime
@@ -27,6 +29,7 @@ RUN bundle install && \
 # YARN
 FROM base as yarn
 COPY package.json ./
+COPY yarn.lock ./
 RUN yarn install --check-files & yarn cache clean
 
 
@@ -35,7 +38,7 @@ RUN yarn install --check-files & yarn cache clean
 FROM base as base-app
 COPY . .
 COPY --from=gems /usr/local/bundle /usr/local/bundle
-COPY --from=yarn /app/yarn.lock yarn.lock
+COPY --from=yarn /${APP_NAME}/yarn.lock yarn.lock
 
 
 
