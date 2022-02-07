@@ -24,7 +24,7 @@ Either run a script to initialize the app, or initialize manually by running the
 ```bash
 docker compose build --no-cache
 docker compose run --no-deps web rails new . --force --skip-bundle --database=postgresql
-git init && git commit -am "Initialized App."
+rm -rf .git && git init && git commit -am "Initialized App."
 docker compose run --no-deps web bundle install
 mv -f database.template.yml config/database.yml
 docker compose run web bundle exec rails db:create
